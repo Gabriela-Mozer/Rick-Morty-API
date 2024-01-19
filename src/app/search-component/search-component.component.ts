@@ -20,29 +20,24 @@ export class SearchComponent implements OnInit {
     search: new FormControl(''),
   });
 
-  id: number = 1;
-  name: string = '';
-
   private query: string = '';
   private pageNum: number = 1;
 
   constructor(private rickAndMortyService: RickAndMortyService) {}
 
   ngOnInit(): void {
-    this.rickAndMortyService
-      .getDetails(this.id)
-      .subscribe((characterDetails: any) => {
-        console.log(characterDetails);
-      });
-    this.getCharacterName();
+    this.getCharacterName()
+    console.log(this.characters);
   }
 
   getCharacterName(): void {
-    this.rickAndMortyService
-      .getCharacterByName(this.name)
-      .subscribe((characterName: any) => {
-        console.log(characterName);
-      });
+    this.searchForm
+      .get('search')
+      ?.valueChanges.pipe(debounceTime(300), distinctUntilChanged(),
+      switchMap((name:string) => this.rickAndMortyService.getCharacterByName(name))
+      ).subscribe((characters: Character[]) => {
+        this.characters = characters;
+      })
   }
   private getDataFromService(): void {
     this.rickAndMortyService

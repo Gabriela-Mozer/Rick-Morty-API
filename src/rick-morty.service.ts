@@ -15,7 +15,8 @@ export class RickAndMortyService {
     return this.http.get<Character[]>(filteredCharacters);
   }
 
-  getCharacterByName(name: string): Observable<Character[]> {
+
+  getCharacterByName(name: string): Observable<any> {
     return this.http.get<Character[]>(`${this.apiUrl}/?name=${name}`);
   }
 
