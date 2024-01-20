@@ -22,11 +22,12 @@ export class SearchComponent implements OnInit {
 
   private query: string = '';
   private pageNum: number = 1;
+  name: string = '';
 
   constructor(private rickAndMortyService: RickAndMortyService) {}
 
   ngOnInit(): void {
-    this.getCharacterName()
+    this.getCharacterName();
     console.log(this.characters);
   }
 
@@ -35,10 +36,17 @@ export class SearchComponent implements OnInit {
       .get('search')
       ?.valueChanges.pipe(debounceTime(300), distinctUntilChanged(),
       switchMap((name:string) => this.rickAndMortyService.getCharacterByName(name))
-      ).subscribe((characters: Character[]) => {
-        this.characters = characters;
+      ).subscribe((characterNames: Character[]) => {
+        this.characters = characterNames;
       })
+    // this.rickAndMortyService
+    //   .getCharacterByName(this.name)
+    //   .subscribe((res: { name: string }) => {
+    //     this.name = res.name;
+    //     console.log(this.name);
+    //   });
   }
+
   private getDataFromService(): void {
     this.rickAndMortyService
       .searchCharacters(this.query, this.pageNum)

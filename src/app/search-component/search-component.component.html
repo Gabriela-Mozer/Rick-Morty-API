@@ -1,3 +1,7 @@
-<div *ngFor="let character of characters">
-  {{ character }}
+<div [formGroup]="searchForm">
+  <input type="text" formControlName="search" />
+  <li *ngFor="let characterName of characters">
+    {{ characterName }}
+  </li>
 </div>
+

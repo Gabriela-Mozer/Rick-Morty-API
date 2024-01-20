@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Character } from './app/interfaces/character.interface';
 
 @Injectable({
@@ -15,9 +15,10 @@ export class RickAndMortyService {
     return this.http.get<Character[]>(filteredCharacters);
   }
 
-
   getCharacterByName(name: string): Observable<any> {
-    return this.http.get<Character[]>(`${this.apiUrl}/?name=${name}`);
+   return this.http.get<Character[]>(`${this.apiUrl}/?name=${name}`).pipe(
+    map((response: any) => response.name)
+   )
   }
 
   getDetails(id: number): Observable<any> {
