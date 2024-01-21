@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { Character } from './app/interfaces/character.interface';
@@ -10,14 +10,10 @@ export class RickAndMortyService {
   private apiUrl = 'https://rickandmortyapi.com/api/character/';
   constructor(private http: HttpClient) {}
 
-  searchCharacters(query = '', page = 1) {
-    const filteredCharacters = `${this.apiUrl}/?name=${query}&page=${page}`;
-    return this.http.get<Character[]>(filteredCharacters);
-  }
-
-  getCharacterByName(name: string): Observable<any> {
-   return this.http.get<Character[]>(`${this.apiUrl}/?name=${name}`).pipe(
-    map((response: any) => response.name)
+  getCharacterData(data : string): Observable<Character[]> {
+   const params = new HttpParams().set('data', data);
+   return this.http.get<Character[]>(this.apiUrl, {params}).pipe(
+    map((response: any) => response.results)
    )
   }
 

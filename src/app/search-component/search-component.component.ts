@@ -11,8 +11,6 @@ import { Character } from '../interfaces/character.interface';
   styleUrls: ['./search-component.component.css'],
 })
 export class SearchComponent implements OnInit {
-  searchTerm: string = '';
-  searchResults: any[] = [];
 
   characters: Character[] = [];
 
@@ -22,7 +20,7 @@ export class SearchComponent implements OnInit {
 
   private query: string = '';
   private pageNum: number = 1;
-  name: string = '';
+  characterData: string = '';
 
   constructor(private rickAndMortyService: RickAndMortyService) {}
 
@@ -34,25 +32,15 @@ export class SearchComponent implements OnInit {
   getCharacterName(): void {
     this.searchForm
       .get('search')
-      ?.valueChanges.pipe(debounceTime(300), distinctUntilChanged(),
-      switchMap((name:string) => this.rickAndMortyService.getCharacterByName(name))
-      ).subscribe((characterNames: Character[]) => {
-        this.characters = characterNames;
-      })
-    // this.rickAndMortyService
-    //   .getCharacterByName(this.name)
-    //   .subscribe((res: { name: string }) => {
-    //     this.name = res.name;
-    //     console.log(this.name);
-    //   });
-  }
-
-  private getDataFromService(): void {
-    this.rickAndMortyService
-      .searchCharacters(this.query, this.pageNum)
-      .pipe(take(1))
-      .subscribe((res: any) => {
-        this.characters = [...this.characters];
+      ?.valueChanges.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((characterData: string) =>
+          this.rickAndMortyService.getCharacterData(characterData)
+        )
+      )
+      .subscribe((characterInfo: Character[]) => {
+        this.characters = characterInfo;
       });
   }
 }

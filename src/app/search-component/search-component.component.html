@@ -1,7 +1,6 @@
 <div [formGroup]="searchForm">
   <input type="text" formControlName="search" />
-  <li *ngFor="let characterName of characters">
-    {{ characterName }}
+  <li *ngFor="let characterInfo of characters">
+    {{ characterInfo.name }} {{ characterInfo.status }}
   </li>
 </div>
-
